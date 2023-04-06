@@ -1,0 +1,94 @@
+CREATE TABLE organizations
+(
+    Id SERIAL PRIMARY KEY,
+    Name CHARACTER VARYING(30),
+	Owner CHARACTER VARYING(100),
+	Country CHARACTER VARYING(25),
+	City CHARACTER VARYING(25),
+	Street CHARACTER VARYING(25),
+	House CHARACTER VARYING(25),
+	Phone CHARACTER VARYING(12)
+);
+INSERT Into organizations
+(Name,Owner,Country,City,Street,House,Phone) 
+VALUES ('ООО Рога и Копыта', 'Иванов Иван Иванович', 'Россия','Москва','Ленина','75в','+79171230001');
+
+CREATE TABLE products
+(
+    Id SERIAL PRIMARY KEY,
+    Name CHARACTER VARYING(30),
+	Manufacturer integer references Organizations(id),
+	Color CHARACTER VARYING(25),
+	Cost decimal,
+	Curr CHARACTER VARYING(4)
+);
+Insert into products
+(Name,Manufacturer,Color,Cost,Curr)
+values('Зубная щетка','1','Красный','50','РУБ');
+Insert into products
+(Name,Manufacturer,Color,Cost,Curr)
+values('Полотенце','1','Синий','200','РУБ');
+Insert into products
+(Name,Manufacturer,Color,Cost,Curr)
+values('Полотенце','1','Желтый','200.50','РУБ');
+
+CREATE TABLE customers
+(
+    Id SERIAL PRIMARY KEY,
+    Name CHARACTER VARYING(50),
+	Country CHARACTER VARYING(25),
+	City CHARACTER VARYING(25),
+	Street CHARACTER VARYING(25),
+	House CHARACTER VARYING(25),
+	Phone CHARACTER VARYING(12)
+);
+INSERT Into customers
+(Name,Country,City,Street,House,Phone) 
+VALUES ('Петрова Лариса Ивановна', 'Россия','Казань','Патриса Лумумбы','13','+79277755006');
+INSERT Into customers
+(Name,Country,City,Street,House,Phone) 
+VALUES ('Максимов Пётр Самойлович', 'Россия','Уфа','Победы','43','+79377755074');
+
+CREATE TABLE baskets
+(
+    customer_id integer references customers(id),
+	product_id integer references products(id) ,
+	quantity integer,
+	PRIMARY KEY(customer_id, product_id)
+);
+INSERT Into baskets
+(customer_id,product_id,quantity) 
+VALUES ('1', '1',1);
+INSERT Into baskets
+(customer_id,product_id,quantity) 
+VALUES ('1', '2',2);
+INSERT Into baskets
+(customer_id,product_id,quantity) 
+VALUES ('2', '2',5);
+
+CREATE TABLE orders
+(	Id SERIAL PRIMARY KEY,
+    customer_id integer references customers(id) not null,
+    amount money not null,
+    paid DATE,
+    collected DATE,
+    shipped DATE,
+    cancelled DATE
+);
+CREATE TABLE order_item
+(	order_Id integer references orders(id) not null,
+    position SERIAL,
+    product_id integer references products(id) not null,
+    quantity integer not null,
+ amount money not null,
+ PRIMARY KEY(Order_Id, position)
+);
+INSERT Into orders
+(customer_id,amount,paid) 
+VALUES ('1', '250', '01.01.2023');
+INSERT Into order_item
+(order_id,product_id,quantity,amount) 
+VALUES ('1', '1','1','50');
+INSERT Into order_item
+(order_id,product_id,quantity,amount) 
+VALUES ('1', '2',1,'200');

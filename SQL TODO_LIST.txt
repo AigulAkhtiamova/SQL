@@ -1,0 +1,38 @@
+CREATE TABLE users
+(
+    Id SERIAL PRIMARY KEY,
+	Login CHARACTER VARYING(10),
+	Email CHARACTER VARYING(30),
+	Password CHARACTER VARYING(10),
+    Name CHARACTER VARYING(30),
+	Surname CHARACTER VARYING(30),
+    Birthday DATE,
+	Organization CHARACTER VARYING(30)
+);
+INSERT INTO users (Login, Email, Password, Name, Surname, Birthday, Organization) 
+		VALUES ('Masha', '111@mail.ru','111','Маша','Иванова','01.01.1996','ООО Рога и Копыта');
+INSERT INTO users (Login, Email, Password, Name, Surname, Birthday, Organization) 
+		VALUES ('crazyrider', 'crazyrider@mail.ru','555','Артур','Сапогов','01.01.2020','ИП Молодец');
+
+select * from users
+
+
+CREATE TABLE todo_list
+(
+    Id SERIAL PRIMARY KEY,
+    Name CHARACTER VARYING(30),
+	Date_from DATE,
+	Date_to DATE,
+	Description CHARACTER VARYING(50),
+	Status BOOLEAN,
+    Own INTEGER REFERENCES users(Id)
+);
+INSERT INTO todo_list (Name, Date_from, Date_to, Description, Status, Own) 
+		VALUES ('Почистить картошку', '01.01.2023','01.01.2023','Почистить ведро картошки','1','1');
+INSERT INTO todo_list (Name, Date_from, Date_to, Description, Status, Own) 
+		VALUES ('Сшить платье', '01.01.2023','31.03.2023','Сшить платье с длинной юбкой','0','1');
+INSERT INTO todo_list (Name, Date_from, Date_to, Description, Status, Own) 
+		VALUES ('Купить мотоцикл', '01.01.2023','31.12.2023','Купить мотоцикл Suzuki','0','2');
+INSERT INTO todo_list (Name, Date_from, Date_to, Description, Status, Own) 
+		VALUES ('Продать машину', '01.12.2022','31.12.2022','Продать машину до Нового года','0','2');
+select * from todo_list where own = 1 order by status 

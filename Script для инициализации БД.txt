@@ -1,0 +1,24 @@
+// Script для инициализации БД
+    // Использована библиотека IBATIS
+    //
+    private void runningScripts() throws SQLException, FileNotFoundException {
+        // Тут подключаемся к БД
+        String mysqlUrl = "jdbc:postgresql://localhost:5432/тутТакЖеПодСебя";
+        Connection con = DriverManager.getConnection(mysqlUrl, "имя", "пароль");
+        System.out.println("Connection established......");
+        // Инициализируем ScriptRunner
+        ScriptRunner sr = new ScriptRunner(con);
+        System.out.println("Инициализируем базу данных PostgreSQL...");
+        // Создаем reader и передаем туда файл .sql
+        Reader reader = new BufferedReader(new FileReader
+                ("D:\\Свой Путь к Файлу\\src\\main\\java\\com\\tinychiefdelights\\database\\initDataBase.sql"));
+        // Запускаем runner
+        sr.runScript(reader);
+        System.out.println("База данных успешно проинициализированна!");
+    }
+
+или
+try (Connection db = DriverManager.getConnection("jdbc:postgresql://localhost/postgres", "user", "password")) {
+    Statement stmt = db.createStatement();
+    stmt.execute(sql);
+}
